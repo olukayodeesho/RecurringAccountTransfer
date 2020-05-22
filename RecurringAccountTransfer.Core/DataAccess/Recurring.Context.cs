@@ -28,5 +28,6 @@ namespace RecurringAccountTransfer.Core.DataAccess
         public virtual DbSet<RecurringFrequency> RecurringFrequencies { get; set; }
         public virtual DbSet<RecurringSetup> RecurringSetups { get; set; }
         public virtual DbSet<RequestResponseLog> RequestResponseLogs { get; set; }
+        public virtual DbSet<RecurringSetupAttemptLog> RecurringSetupAttemptLogs { get; set; }
     }
 }

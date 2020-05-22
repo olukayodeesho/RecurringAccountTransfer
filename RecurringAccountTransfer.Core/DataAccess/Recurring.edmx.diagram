@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="RecurringAccountTransfersModel.RecurringFrequency" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RecurringAccountTransfersModel.RecurringSetup" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RecurringAccountTransfersModel.RequestResponseLog" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecurringAccountTransfersModel.RecurringSetupAttemptLog" Width="1.5" PointX="5" PointY="4.5" />
+        <AssociationConnector Association="RecurringAccountTransfersModel.FK_RecurringSetupAttemptLog_RecurringSetup" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

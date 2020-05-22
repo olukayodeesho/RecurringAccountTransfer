@@ -7,10 +7,9 @@ using RecurringAccountTransfer.Core.Enum;
 
 namespace RecurringAccountTransfer.Core.BusinessObject.DTO
 {
-   public class RecurringAccountRequest
+   public class RecurringAccountRequest : BaseRequest
     {
         public string SourceAccountNumber { get; set; }
-        public Int64 ProfileId { get; set; }
         public string SourceBankCode { get; set; }
         public string DestinationBankCode { get; set; }
         public string DestinationAccountNumber { get; set; }

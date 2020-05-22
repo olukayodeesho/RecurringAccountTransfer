@@ -29,6 +29,21 @@
           <Property Name="Purpose" Type="varchar" MaxLength="50" />
           <Property Name="ProfileId" Type="bigint" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RecurringAccountTransfers.dbo.RecurringSetupAttemptLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RecurringSetupAttemptLog">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="RecurringSetupId" />
+            <PropertyRef Name="IsSuccessful" />
+            <PropertyRef Name="DateAttempted" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecurringSetupId" Type="bigint" Nullable="false" />
+          <Property Name="IsSuccessful" Type="bit" Nullable="false" />
+          <Property Name="DateAttempted" Type="datetime" Nullable="false" />
+          <Property Name="DebitServiceResponse" Type="varchar" MaxLength="5000" />
+        </EntityType>
         <EntityType Name="RequestResponseLog">
           <Key>
             <PropertyRef Name="Id" />
@@ -42,10 +57,35 @@
           <Property Name="ResponseTime" Type="datetime" />
           <Property Name="ResponseHttpCode" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_RecurringSetupAttemptLog_RecurringSetup">
+          <End Role="RecurringSetup" Type="Self.RecurringSetup" Multiplicity="1" />
+          <End Role="RecurringSetupAttemptLog" Type="Self.RecurringSetupAttemptLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecurringSetup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RecurringSetupAttemptLog">
+              <PropertyRef Name="RecurringSetupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="RecurringAccountTransfersModelStoreContainer">
           <EntitySet Name="RecurringFrequency" EntityType="Self.RecurringFrequency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecurringSetup" EntityType="Self.RecurringSetup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequestResponseLog" EntityType="Self.RequestResponseLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecurringSetupAttemptLog" EntityType="Self.RecurringSetupAttemptLog" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [RecurringSetupAttemptLog].[Id] AS [Id], 
+    [RecurringSetupAttemptLog].[RecurringSetupId] AS [RecurringSetupId], 
+    [RecurringSetupAttemptLog].[IsSuccessful] AS [IsSuccessful], 
+    [RecurringSetupAttemptLog].[DateAttempted] AS [DateAttempted], 
+    [RecurringSetupAttemptLog].[DebitServiceResponse] AS [DebitServiceResponse]
+    FROM [dbo].[RecurringSetupAttemptLog] AS [RecurringSetupAttemptLog]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_RecurringSetupAttemptLog_RecurringSetup" Association="Self.FK_RecurringSetupAttemptLog_RecurringSetup">
+            <End Role="RecurringSetup" EntitySet="RecurringSetup" />
+            <End Role="RecurringSetupAttemptLog" EntitySet="RecurringSetupAttemptLog" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -75,6 +115,7 @@
           <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RecurringFrequency" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ProfileId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="RecurringSetupAttemptLogs" Relationship="RecurringAccountTransfersModel.FK_RecurringSetupAttemptLog_RecurringSetup" FromRole="RecurringSetup" ToRole="RecurringSetupAttemptLog" />
         </EntityType>
         <EntityType Name="RequestResponseLog">
           <Key>
@@ -93,7 +134,38 @@
           <EntitySet Name="RecurringFrequencies" EntityType="Self.RecurringFrequency" />
           <EntitySet Name="RecurringSetups" EntityType="Self.RecurringSetup" />
           <EntitySet Name="RequestResponseLogs" EntityType="Self.RequestResponseLog" />
+          <EntitySet Name="RecurringSetupAttemptLogs" EntityType="RecurringAccountTransfersModel.RecurringSetupAttemptLog" />
+          <AssociationSet Name="FK_RecurringSetupAttemptLog_RecurringSetup" Association="RecurringAccountTransfersModel.FK_RecurringSetupAttemptLog_RecurringSetup">
+            <End Role="RecurringSetup" EntitySet="RecurringSetups" />
+            <End Role="RecurringSetupAttemptLog" EntitySet="RecurringSetupAttemptLogs" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="RecurringSetupAttemptLog">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="RecurringSetupId" />
+            <PropertyRef Name="IsSuccessful" />
+            <PropertyRef Name="DateAttempted" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecurringSetupId" Type="Int64" Nullable="false" />
+          <Property Name="IsSuccessful" Type="Boolean" Nullable="false" />
+          <Property Name="DateAttempted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DebitServiceResponse" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="RecurringSetup" Relationship="RecurringAccountTransfersModel.FK_RecurringSetupAttemptLog_RecurringSetup" FromRole="RecurringSetupAttemptLog" ToRole="RecurringSetup" />
+        </EntityType>
+        <Association Name="FK_RecurringSetupAttemptLog_RecurringSetup">
+          <End Type="RecurringAccountTransfersModel.RecurringSetup" Role="RecurringSetup" Multiplicity="1" />
+          <End Type="RecurringAccountTransfersModel.RecurringSetupAttemptLog" Role="RecurringSetupAttemptLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecurringSetup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RecurringSetupAttemptLog">
+              <PropertyRef Name="RecurringSetupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -137,6 +209,17 @@
                 <ScalarProperty Name="ResponseBody" ColumnName="ResponseBody" />
                 <ScalarProperty Name="ResponseTime" ColumnName="ResponseTime" />
                 <ScalarProperty Name="ResponseHttpCode" ColumnName="ResponseHttpCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecurringSetupAttemptLogs">
+            <EntityTypeMapping TypeName="RecurringAccountTransfersModel.RecurringSetupAttemptLog">
+              <MappingFragment StoreEntitySet="RecurringSetupAttemptLog">
+                <ScalarProperty Name="DebitServiceResponse" ColumnName="DebitServiceResponse" />
+                <ScalarProperty Name="DateAttempted" ColumnName="DateAttempted" />
+                <ScalarProperty Name="IsSuccessful" ColumnName="IsSuccessful" />
+                <ScalarProperty Name="RecurringSetupId" ColumnName="RecurringSetupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

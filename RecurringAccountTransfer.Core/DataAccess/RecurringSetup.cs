@@ -14,6 +14,12 @@ namespace RecurringAccountTransfer.Core.DataAccess
     
     public partial class RecurringSetup
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RecurringSetup()
+        {
+            this.RecurringSetupAttemptLogs = new HashSet<RecurringSetupAttemptLog>();
+        }
+    
         public long Id { get; set; }
         public string SourceAccountNumber { get; set; }
         public string SourceBankCode { get; set; }
@@ -27,5 +33,8 @@ namespace RecurringAccountTransfer.Core.DataAccess
         public string Purpose { get; set; }
         public string RecurringFrequency { get; set; }
         public long ProfileId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RecurringSetupAttemptLog> RecurringSetupAttemptLogs { get; set; }
     }
 }
