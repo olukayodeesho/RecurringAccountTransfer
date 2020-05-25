@@ -33,6 +33,10 @@ namespace RecurringAccountTransfer.Core.DataAccess
         public string Purpose { get; set; }
         public string RecurringFrequency { get; set; }
         public long ProfileId { get; set; }
+        public bool IsCompleted { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public string Narration { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RecurringSetupAttemptLog> RecurringSetupAttemptLogs { get; set; }

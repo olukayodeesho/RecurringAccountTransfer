@@ -28,6 +28,10 @@
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Purpose" Type="varchar" MaxLength="50" />
           <Property Name="ProfileId" Type="bigint" Nullable="false" />
+          <Property Name="IsCompleted" Type="bit" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="Narration" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'RecurringAccountTransfers.dbo.RecurringSetupAttemptLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -116,6 +120,10 @@ warning 6002: The table/view 'RecurringAccountTransfers.dbo.RecurringSetupAttemp
           <Property Name="RecurringFrequency" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ProfileId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="RecurringSetupAttemptLogs" Relationship="RecurringAccountTransfersModel.FK_RecurringSetupAttemptLog_RecurringSetup" FromRole="RecurringSetup" ToRole="RecurringSetupAttemptLog" />
+          <Property Name="IsCompleted" Type="Boolean" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Narration" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RequestResponseLog">
           <Key>
@@ -183,6 +191,10 @@ warning 6002: The table/view 'RecurringAccountTransfers.dbo.RecurringSetupAttemp
           <EntitySetMapping Name="RecurringSetups">
             <EntityTypeMapping TypeName="RecurringAccountTransfersModel.RecurringSetup">
               <MappingFragment StoreEntitySet="RecurringSetup">
+                <ScalarProperty Name="Narration" ColumnName="Narration" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
                 <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
                 <ScalarProperty Name="RecurringFrequency" ColumnName="RecurringFrequency" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

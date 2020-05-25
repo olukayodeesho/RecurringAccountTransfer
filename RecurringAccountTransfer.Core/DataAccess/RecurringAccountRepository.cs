@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using RecurringAccountTransfer.Core.BusinessObject.DTO;
 
 namespace RecurringAccountTransfer.Core.DataAccess
 {
     public class RecurringAccountRepository
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         public static bool Create(RecurringAccountRequest req)
         {
             var result = false; 
@@ -34,7 +37,7 @@ namespace RecurringAccountTransfer.Core.DataAccess
 
 
             }
-            catch (Exception e) { }
+            catch (Exception e) { Logger.Error(e); }
             return result; 
 
         }
@@ -58,7 +61,7 @@ namespace RecurringAccountTransfer.Core.DataAccess
 
 
             }
-            catch (Exception e) { }
+            catch (Exception e) { Logger.Error(e); }
             return result;
 
         }
@@ -78,7 +81,7 @@ namespace RecurringAccountTransfer.Core.DataAccess
                 }
 
             }
-            catch (Exception e) { }
+            catch (Exception e) { Logger.Error(e); }
             return result;
 
         }
@@ -93,7 +96,7 @@ namespace RecurringAccountTransfer.Core.DataAccess
                 }
 
             }
-            catch (Exception e) { }
+            catch (Exception e) { Logger.Error(e); }
             return result;
 
         }
@@ -108,10 +111,24 @@ namespace RecurringAccountTransfer.Core.DataAccess
                 }
 
             }
-            catch (Exception e) { }
+            catch (Exception e) { Logger.Error(e); }
             return result;
         }
 
+        public static List<RecurringSetup> GetSemiFilteredRecurringDuePerDay( DateTime dueDate )
+        {
+            var result = new List<RecurringSetup>();
+            try
+            {
+                using (var dc = new RecurringAccountTransfersEntities())
+                {
+                    result = dc.RecurringSetups.Where(f =>  f.Enable && !f.IsCompleted  && (DbFunctions.TruncateTime(f.EndDate) <= DbFunctions.TruncateTime(f.EndDate)) ).ToList<RecurringSetup>();
+                }
+
+            }
+            catch (Exception e) { Logger.Error(e); }
+            return result;
+        }
 
 
 
